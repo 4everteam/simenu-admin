@@ -204,7 +204,7 @@ const FormProductManagement = ({ titlePage }: FormProductManagementProps) => {
         } else {
           setSuccess('Produk berhasil diubah');
           setTimeout(() => {
-            navigate('/kelola-produk');
+            navigate('/admin/kelola-produk');
           }, 2000);
         }
       } else {
@@ -381,7 +381,7 @@ const FormProductManagement = ({ titlePage }: FormProductManagementProps) => {
                 <div className="flex justify-end gap-4.5">
                   <button
                     type="button"
-                    onClick={() => navigate('/kelola-produk')}
+                    onClick={() => navigate('/admin/kelola-produk')}
                     className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                   >
                     Batal

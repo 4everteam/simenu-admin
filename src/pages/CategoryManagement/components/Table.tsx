@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { deleteCategory } from '../../../fetch/categories-management';
+import { Icon } from '@iconify/react';
 
 interface TableProps {
   columns: string[];
@@ -49,6 +50,15 @@ const Table = ({
     }
   };
 
+  const getIconNameOnly = (fullIconString: string) => {
+    return fullIconString.split(',')[0].trim();
+  };
+
+  const getIconColor = (fullIconString: string) => {
+    const colorPart = fullIconString.split('color:')[1];
+    return colorPart ? colorPart.trim() : '#F1C57C';
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-4 flex justify-between items-center">
@@ -74,7 +84,7 @@ const Table = ({
               {columns.map((column, index) => (
                 <th
                   key={index}
-                  className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11"
+                  className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white"
                 >
                   {column}
                 </th>
@@ -124,7 +134,7 @@ const Table = ({
                                 />
                               </svg>
                             </button>
-                            <Link to={`/update-kelola-kategori/${item['id'] || null}`} className="hover:text-primary">
+                            <Link to={`/admin/update-kelola-kategori/${item['id'] || null}`} className="hover:text-primary">
                               <svg
                                 className="fill-current"
                                 width="18"
@@ -146,6 +156,18 @@ const Table = ({
                       return (
                         <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                           <p className="text-black dark:text-white">{item["name"] || '-'}</p>
+                        </td>
+                      );
+                    }else if (["icon", "ikon", "Logo", "logo"].includes(columnLower)) {
+                      return (
+                        <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                          {item["logo"] ? (
+                            <div className="flex items-center">
+                              <Icon icon={getIconNameOnly(item["logo"])} width="50" height="50" color={getIconColor(item["logo"])} className="mr-2" />
+                            </div>
+                          ) : (
+                            <p className="text-black dark:text-white">Tidak tersedia</p>
+                          )}
                         </td>
                       );
                     }else {

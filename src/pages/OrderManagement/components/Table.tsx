@@ -1,23 +1,53 @@
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { deleteProduct } from '../../../fetch/product-management';
+import { deleteOrder } from '../../../fetch/order-management';
 import { formatRupiah } from '../../../utils/formatCurrency';
 
+// Define proper interfaces for type safety
+interface OrderItem {
+  id: number;
+  product: {
+    id: string;
+    name: string;
+    image_url: string;
+    price: number;
+    description: string;
+  },
+  quantity: number;
+  notes: string;
+  status: string;
+}
+
+interface OrderData {
+  order_id: string;
+  table_id: number;
+  on_behalf: string;
+  type: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  items: OrderItem[];
+  payment: {
+    id: string,
+    method: string,
+    status: string,
+  };
+  total_amount: number,
+}
+
 interface TableProps {
-  columns: string[];
-  data: any[];
+  data: OrderData[];
   addButton?: {
     text: string;
     link: string;
   };
-  renderCustomCell?: (item: any, column: string, index: number) => React.ReactNode;
+  onRefresh?: () => void;
 }
 
 const Table = ({ 
-  columns = [], 
   data = [], 
-  addButton = { text: "Tambah", link: "" },
-  renderCustomCell
+  addButton = { text: "", link: "" },
+  onRefresh
 }: TableProps) => {
   const navigate = useNavigate();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
@@ -31,63 +61,36 @@ const Table = ({
   };
 
   const handleConfirmDelete = async (event: FormEvent<HTMLButtonElement>) => {
-    try {
-      event.preventDefault();
+    event.preventDefault();
 
+    if (!selectedId) return;
+    
+    try {
       setDeleteLoading(true);
-      const response = await deleteProduct({id: selectedId});
+      setError(null);
+      
+      const response = await deleteOrder({ id: selectedId });
+      
       if (response) {
-        navigate(0);
+        // Use onRefresh callback instead of navigate(0)
+        if (onRefresh) {
+          onRefresh();
+        }
+        setShowDeleteConfirm(false);
       } else {
-        setError('Gagal menghapus produk');
+        throw new Error('Failed to delete order');
       }
-    } catch (error) {
-      console.error('Error deleting product:', error);
-      setError('Terjadi kesalahan saat menghapus produk');
+    } catch (err) {
+      console.error('Error deleting order:', err);
+      setError(err instanceof Error ? err.message : 'Terjadi kesalahan saat menghapus pesanan');
     } finally {
       setDeleteLoading(false);
-      setShowDeleteConfirm(false);
     }
   };
 
-  const renderDescription = (description: string) => {
-    if (!description) return '-';
-    return description.length > 50 ? `${description.slice(0, 50)}...` : description;
-  };
-
-  const renderPrice = (price: number) => {
-    if (!price && price !== 0) return '-';
-    return `${formatRupiah(price)}`;
-  };
-
-  const renderCategory = (category: any) => {
-    if (!category || !category.name) return '-';
-    return category.name;
-  };
-
-  const renderAvailability = (isAvailable: boolean) => {
-    return isAvailable ? (
-      <span className="text-green-500">Masih tersedia</span>
-    ) : (
-      <span className="text-red-500">Tidak tersedia</span>
-    );
-  };
-
-  const renderImage = (imageUrl: string, altText: string) => {
-    if (!imageUrl) return <p className="text-black dark:text-white">-</p>;
-    
-    return (
-      <img 
-        src={`${import.meta.env.VITE_SERVER_URL}/api/v1/file/${imageUrl}`} 
-        alt={altText} 
-        className="w-16 h-16 object-cover rounded"
-      />
-    );
-  };
-
-  const renderActionButtons = (id: string) => (
+  const renderActionButtons = (id: string, tableCode: number) => (
     <div className="flex items-center space-x-3.5">
-      <Link to={`/admin/detail-produk/${id}`} className="hover:text-primary">
+      <Link to={`/admin/detail-pesanan/${id.replace(/\//g, '|')}`} className="hover:text-primary">
         <svg
           className="fill-current"
           width="18"
@@ -133,7 +136,7 @@ const Table = ({
           />
         </svg>
       </button>
-      <Link to={`/admin/update-kelola-produk/${id}`} className="hover:text-primary">
+      <Link to={`/admin/edit-pesanan/${id.replace(/\//g, '|')}`} className="hover:text-primary">
         <svg
           className="fill-current"
           width="18"
@@ -151,83 +154,57 @@ const Table = ({
     </div>
   );
 
-  const renderCell = (item: any, column: string, colIndex: number) => {
-    if (renderCustomCell) {
-      return renderCustomCell(item, column, colIndex);
+  const renderStatusBadge = (status: string) => {
+    let statusClass = '';
+    let displayText = status;
+    
+    switch(status.toLowerCase()) {
+      case 'pending':
+        statusClass = 'bg-warning text-warning';
+        displayText = 'Menunggu';
+        break;
+      case 'processing':
+        statusClass = 'bg-info text-info';
+        displayText = 'Diproses';
+        break;
+      case 'completed':
+        statusClass = 'bg-success text-success';
+        displayText = 'Selesai';
+        break;
+      case 'cancelled':
+        statusClass = 'bg-danger text-danger';
+        displayText = 'Dibatalkan';
+        break;
+      default:
+        statusClass = 'bg-gray-500 text-gray-500';
     }
     
-    const columnLower = column.toLowerCase();
-    
-    // Default rendering based on column name
-    if (["action", "aksi"].includes(columnLower)) {
-      return (
-        <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-          {renderActionButtons(item.id)}
-        </td>
-      );
-    } else if (["name", "nama", "nama produk", "nama_produk"].includes(columnLower)) {
-      return (
-        <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-          <p className="text-black dark:text-white">
-            {renderDescription(item.name)}
-          </p>
-        </td>
-      );
-    } else if (["deskripsi", "description"].includes(columnLower)) {
-      return (
-        <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-          <p className="text-black dark:text-white">
-            {renderDescription(item.description)}
-          </p>
-        </td>
-      );
-    } else if (["price", "harga"].includes(columnLower)) {
-      return (
-        <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-          <p className="text-black dark:text-white">
-            {renderPrice(item.price)}
-          </p>
-        </td>
-      );
-    } else if (["category", "kategori"].includes(columnLower)) {
-      return (
-        <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-          <p className="text-black dark:text-white">
-            {renderCategory(item.category)}
-          </p>
-        </td>
-      );
-    } else if (["is_available", "is available", "status"].includes(columnLower)) {
-      return (
-        <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-          <p className="text-black dark:text-white">
-            {renderAvailability(item.is_available)}
-          </p>
-        </td>
-      );
-    } else if (["image", "gambar"].includes(columnLower)) {
-      return (
-        <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-          {renderImage(item.image_url, `Product ${item.name || item.id}`)}
-        </td>
-      );
-    } else {
-      return (
-        <td key={colIndex} className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-          <p className="text-black dark:text-white">
-            {typeof item[columnLower] === 'object' 
-              ? JSON.stringify(item[columnLower])
-              : item[columnLower] || item[column] || '-'}
-          </p>
-        </td>
-      );
+    return (
+      <p className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${statusClass}`}>
+        {displayText}
+      </p>
+    );
+  };
+
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      return dateString;
     }
   };
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="mb-4 flex justify-between items-center">
-        <h4 className="text-xl font-semibold text-black dark:text-white"></h4>
+        <h4 className="text-xl font-semibold text-black dark:text-white">Daftar Pesanan</h4>
         {addButton.link && (
           <Link to={addButton.link} className="inline-flex items-center justify-center rounded-md bg-primary py-2 px-4 text-center font-medium text-white hover:bg-opacity-90">
             <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -239,33 +216,74 @@ const Table = ({
       </div>
       <div className="max-w-full overflow-x-auto">
         {error && (
-          <div className="rounded-sm border border-stroke bg-white p-4 shadow-default dark:border-strokedark dark:bg-boxdark">
-            <p className="text-danger">{error}</p>
+          <div className="bg-danger bg-opacity-10 text-danger px-4 py-3 rounded mb-6">
+            <p>{error}</p>
           </div>
         )}
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              {columns.map((column, index) => (
-                <th
-                  key={index}
-                  className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white"
-                >
-                  {column}
-                </th>
-              ))}
+              <th className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
+                ID
+              </th>
+              <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+                Atas Nama
+              </th>
+              <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                Nomor / Kode Meja
+              </th>
+              <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                Tipe Pesanan
+              </th>
+              <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                Total
+              </th>
+              <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                Tanggal
+              </th>
+              <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                Status
+              </th>
+              <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                Aksi
+              </th>
             </tr>
           </thead>
           <tbody>
             {data.length > 0 ? (
-              data.map((item, rowIndex) => (
-                <tr key={rowIndex} className="border-b border-[#eee] dark:border-strokedark">
-                  {columns.map((column, colIndex) => renderCell(item, column, colIndex))}
+              data.map((order) => (
+                <tr key={order.order_id} className="border-b border-[#eee] dark:border-strokedark">
+                  <td className="py-5 px-4 dark:border-strokedark">
+                    {order.order_id.substring(0, 8)}...
+                  </td>
+                  <td className="py-5 px-4 dark:border-strokedark">
+                    {order.on_behalf || 'N/A'}
+                  </td>
+                  <td className="py-5 px-4 dark:border-strokedark">
+                    {order.table_id || 'N/A'}
+                  </td>
+                  <td className="py-5 px-4 dark:border-strokedark">
+                    {order.type === 'dine_in' ? 'Dine In' : 
+                     order.type === 'take_away' ? 'Take Away' : 
+                     order.type || 'N/A'}
+                  </td>
+                  <td className="py-5 px-4 dark:border-strokedark">
+                    {formatRupiah(order.total_amount || 0)}
+                  </td>
+                  <td className="py-5 px-4 dark:border-strokedark">
+                    {formatDate(order.created_at)}
+                  </td>
+                  <td className="py-5 px-4 dark:border-strokedark">
+                    {renderStatusBadge(order.status || 'pending')}
+                  </td>
+                  <td className="py-5 px-4 dark:border-strokedark">
+                    {renderActionButtons(order.order_id, order.table_id)}
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={columns.length} className="text-center py-4">
+                <td colSpan={8} className="text-center py-4">
                   Tidak ada data tersedia
                 </td>
               </tr>
@@ -283,7 +301,7 @@ const Table = ({
                 Konfirmasi Hapus
               </h3>
               <p className="text-sm text-body dark:text-bodydark">
-                Apakah Anda yakin ingin menghapus produk ini?
+                Apakah Anda yakin ingin menghapus pesanan ini?
                 Tindakan ini tidak dapat dibatalkan.
               </p>
             </div>

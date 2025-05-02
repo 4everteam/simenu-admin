@@ -95,7 +95,7 @@ const Table = ({
           />
         </svg>
       </button>
-      <Link to={`/update-kelola-inventaris/${id}`} className="hover:text-primary">
+      <Link to={`/admin/update-kelola-inventaris/${id}`} className="hover:text-primary">
         <svg
           className="fill-current"
           width="18"
@@ -195,7 +195,7 @@ const Table = ({
               {columns.map((column, index) => (
                 <th
                   key={index}
-                  className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11"
+                  className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white"
                 >
                   {column}
                 </th>

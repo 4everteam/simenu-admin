@@ -60,7 +60,7 @@ const DetailProduct = () => {
       const response = await deleteProduct({ id: productData.id });
       if (response) {
         // Redirect to product list after successful deletion
-        navigate('/kelola-produk');
+        navigate('/admin/kelola-produk');
       } else {
         setError('Gagal menghapus produk');
       }
@@ -147,7 +147,7 @@ const DetailProduct = () => {
               </div>
               <div className="flex justify-end">
                 <Link 
-                  to={`/update-kelola-produk/${productData.id}`} 
+                  to={`/admiin/update-kelola-produk/${productData.id}`} 
                   className="inline-flex items-center justify-center rounded-md border border-primary py-2 px-4 text-center font-medium text-primary hover:bg-primary hover:text-white mr-2"
                 >
                   Edit Produk

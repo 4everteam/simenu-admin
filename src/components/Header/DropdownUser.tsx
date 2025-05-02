@@ -20,12 +20,11 @@ const DropdownUser = () => {
   };
   
   const userData = getUserData();
-  
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     localStorage.removeItem('user_data');
     setTimeout(() => {
-      navigate('/auth/signin');
+      navigate('/admin/auth/signin');
     }, 1000);
   };
 

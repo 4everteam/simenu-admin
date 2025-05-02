@@ -2,6 +2,7 @@ import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import { FormEvent, useState, useEffect, useRef } from 'react';
 import { createCategory, getCategory, updateCategory } from '../../fetch/categories-management';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 
 interface FormCategoryManagementProps {
   titlePage: string;
@@ -10,10 +11,12 @@ interface FormCategoryManagementProps {
 interface CategoryData {
   id?: number;
   name: string;
+  logo: string;
 }
 
 interface FormError {
   name?: string;
+  logo?: string;
   general?: string;
 }
 
@@ -22,11 +25,14 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
   const navigate = useNavigate();
   const [categoryData, setCategoryData] = useState<CategoryData>({
     name: '',
+    logo: ''
   });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<FormError>({});
+  const [iconPreview, setIconPreview] = useState<string | null>(null);
+  const [iconColor, setIconColor] = useState<string>('#F1C57C');
   const fetchedRef = useRef<boolean>(false);
 
   // Fetch category data if in edit mode
@@ -38,7 +44,13 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
         const response = await getCategory({ id: categoryId });
         if (response) {
           // Set the fetched data directly to categoryData
-          setCategoryData(response);
+          setCategoryData(prev => ({
+            ...prev,
+            ...response,
+            name: response.name ?? '',
+            logo: response.logo ?? '',
+          }));
+          
           fetchedRef.current = true;
         } else {
           setError('Kategori tidak ditemukan');
@@ -59,7 +71,7 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
     const timeout = setTimeout(() => {
       setError(null);
       setSuccess(null);
-    }, 3000);
+    }, 1000);
     
     return () => clearTimeout(timeout);
   }, [error, success]);
@@ -75,10 +87,32 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
       }));
     }
     
-    setCategoryData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    if (name === 'logo') {
+      // Set the preview with just the icon name
+      setIconPreview(value);
+      
+      // Check if the value already contains color information
+      if (value.includes(', color:')) {
+        // If it already has color info, use it as is
+        setCategoryData(prev => ({
+          ...prev,
+          [name]: value
+        }));
+      } else {
+        // If no color info, add it
+        const fullIconValue = `${value}, color:${iconColor}`;
+        setCategoryData(prev => ({
+          ...prev,
+          [name]: fullIconValue
+        }));
+      }
+    } else {
+      // Handle other fields normally
+      setCategoryData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -90,7 +124,6 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
     
     try {
       let response;
-      
       if (id) {
         response = await updateCategory({ ...categoryData, id: Number(id) });
       } else {
@@ -121,11 +154,12 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
           setSuccess('Kategori berhasil disimpan');
           setCategoryData({
             name: '',
+            logo: ''
           });
         } else {
           setSuccess('Kategori berhasil diubah');
           setTimeout(() => {
-            navigate('/kelola-kategori');
+            navigate('/admin/kelola-kategori');
           }, 2000);
         }
       } else {
@@ -161,6 +195,36 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <form onSubmit={handleSubmit}>
               <div className="p-6.5">
+              <div className="mb-4.5">
+                  <label className="mb-2.5 block text-black dark:text-white">
+                    Icon Kategori <span className="text-meta-1">*</span>
+                  </label>
+                  <div className="flex gap-4 items-center">
+                    <input
+                      type="text"
+                      name="logo"
+                      value={categoryData.logo || ''}
+                      onChange={handleChange}
+                      placeholder="mdi:food-apple"
+                      className={`w-full rounded border-[1.5px] ${
+                        formErrors.logo ? 'border-danger' : 'border-stroke'
+                      } bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
+                    />
+                    {iconPreview && (
+                      <div className="flex items-center justify-center w-12 h-12 border border-stroke rounded">
+                        <Icon icon={iconPreview} width="24" height="24" color={iconColor} />
+                      </div>
+                    )}
+                  </div>
+                  {formErrors.logo && (
+                    <p className="text-danger text-sm mt-1">{formErrors.logo}</p>
+                  )}
+
+                  <div className="mt-2 text-sm text-gray-500">
+                    Kunjungi website <a href="https://icon-sets.iconify.design/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Iconify Icon Sets</a> untuk memilih icon. Pilih Icon Name yang memiliki (Iconify Icon)
+                  </div>
+                </div>
+
                 <div className="mb-4.5">
                   <label className="mb-2.5 block text-black dark:text-white">
                     Nama Kategori <span className="text-meta-1">*</span>
@@ -183,7 +247,7 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
                 <div className="flex justify-end gap-4.5">
                   <button
                     type="button"
-                    onClick={() => navigate('/kelola-kategori')}
+                    onClick={() => navigate('/admin/kelola-kategori')}
                     className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                   >
                     Batal

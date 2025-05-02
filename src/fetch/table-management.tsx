@@ -135,6 +135,37 @@ export const requestQRTable = async (data: { code: string }, headers = {}) => {
   }
 }
 
+export const deleteQRTable = async (data: { code: string }, headers = {}) => {
+  try {
+    const API_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';
+    const userData = JSON.parse(localStorage.getItem('user_data') ?? '{}');
+    if(!userData.token) {
+      console.error('Request to server failed, token not provided')
+      return;
+    }
+    const response = await axios.delete<ResponseData>(`${API_URL}/api/v1/tables/qr-code/${data.code}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userData.token}`,
+            ...headers
+        }
+    });
+    if (response.data && response.data.status_code === 200) {
+      return response.data.data;
+    } else {
+      console.error('Error requesting QR for table:', response || 'Unknown error');
+      return null;
+    }
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return { errors : error.response?.data.errors };
+    } else {
+      console.error('Unexpected error requesting QR for table:', error);
+    }
+    return null;
+  }
+}
+
 export const createTable = async (tableData: { code: string, status: string, capacity: number }, headers = {}) => {
   try {
     const API_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';

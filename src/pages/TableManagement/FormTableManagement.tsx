@@ -137,7 +137,7 @@ const FormTableManagement = ({ titlePage }: FormTableManagementProps) => {
         } else {
           setSuccess('Data meja berhasil diubah');
           setTimeout(() => {
-            navigate('/kelola-meja');
+            navigate('/admin/kelola-meja');
           }, 2000);
         }
       } else {
@@ -237,7 +237,7 @@ const FormTableManagement = ({ titlePage }: FormTableManagementProps) => {
                 <div className="flex justify-end gap-4.5">
                   <button
                     type="button"
-                    onClick={() => navigate('/kelola-meja')}
+                    onClick={() => navigate('/admin/kelola-meja')}
                     className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                   >
                     Batal

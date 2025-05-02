@@ -52,7 +52,7 @@ const CategoryManagement = () => {
           <div className="text-center py-4 text-danger">{error}</div>
         ) : (
           <Table 
-            columns={["ID", "Nama", "Action"]}           
+            columns={["ID", "Logo", "Nama", "Action"]}           
             data={data} 
             addButton={{ text: "Tambah Kategori", link: "/tambah-kelola-kategori" }}
           />

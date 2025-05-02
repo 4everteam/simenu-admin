@@ -162,7 +162,7 @@ const FormInventoryManagement = ({ titlePage }: InventoryManagementProps) => {
         } else {
           setSuccess('Inventaris berhasil diubah');
           setTimeout(() => {
-            navigate('/kelola-inventaris');
+            navigate('/admin/kelola-inventaris');
           }, 2000);
         }
       } else {
@@ -267,7 +267,7 @@ const FormInventoryManagement = ({ titlePage }: InventoryManagementProps) => {
                 <div className="flex justify-end gap-4.5">
                   <button
                     type="button"
-                    onClick={() => navigate('/kelola-inventaris')}
+                    onClick={() => navigate('/admin/kelola-inventaris')}
                     className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                   >
                     Batal

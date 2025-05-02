@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { getTable, deleteTable, getQRTable, requestQRTable } from '../../fetch/table-management';
+import { getTable, deleteTable, getQRTable, requestQRTable, deleteQRTable } from '../../fetch/table-management';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { getTimeElapsed } from '../../utils/formatDate';
+import TableOrderItem from './components/TableOrderItem';
+import PaymentBill from './components/PaymentBill';
 
 interface TableData {
   id: string;
@@ -81,7 +83,7 @@ const DetailTable = () => {
       const response = await deleteTable({ code: tableData.code });
       if (response) {
         // Redirect to table list after successful deletion
-        navigate('/kelola-meja');
+        navigate('/admin/kelola-meja');
       } else {
         setError('Failed to delete table');
       }
@@ -105,6 +107,7 @@ const DetailTable = () => {
         setQrValue(response.url);
         setTimeQRGenerated(getTimeElapsed(response.updated_at));
         setQrGenerated(true);
+        fetchTableDetail(tableCode);
       } else {
         throw new Error('Invalid QR code response');
       }
@@ -243,6 +246,34 @@ const DetailTable = () => {
     printWindow.document.close();
   };
 
+  const handleDeleteQR = async (tableCode: string) => {
+    if (!tableCode) return;
+    
+    try {
+      setQRLoading(true);
+      setError(null);
+      
+      const response = await deleteQRTable({ code: tableCode });
+      if (!response) {
+        // Reset QR state instead of reloading the page
+        setQrValue('');
+        setQrGenerated(false);
+        setTimeQRGenerated('');
+        
+        // Fetch updated table data
+        fetchTableDetail(tableCode);
+      } else {
+        console.log(response)
+        throw new Error('Failed to delete QR code');
+      }
+    } catch (error) {
+      console.error('Error deleting QR code:', error);
+      setError('Failed to delete QR code');
+    } finally {
+      setQRLoading(false);
+    }
+  };
+
   // Helper function to capitalize first letter
   const capitalizeFirstLetter = (string: string): string => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -358,6 +389,12 @@ const DetailTable = () => {
               >
                 Print QR Code
               </button>
+              <button
+                onClick={(e) => tableData && handleDeleteQR(tableData.code)}
+                className="inline-flex items-center justify-center rounded-md bg-danger py-2 px-4 text-center font-medium text-white hover:bg-opacity-90 flex-1"
+              >
+                Delete QR Code
+              </button>
             </div>
           )}
         </div>
@@ -427,7 +464,7 @@ const DetailTable = () => {
               </div>
               <div className="flex justify-end">
                 <Link 
-                  to={`/update-kelola-meja/${tableData.code}`} 
+                  to={`/admin/update-kelola-meja/${tableData.code}`} 
                   className="inline-flex items-center justify-center rounded-md border border-primary py-2 px-4 text-center font-medium text-primary hover:bg-primary hover:text-white mr-2"
                 >
                   Edit Meja
@@ -485,7 +522,15 @@ const DetailTable = () => {
             {/* QR Generator Section */}
             {renderQRCode()}
           </div>
-
+          <div>
+            <PaymentBill
+              tableCode={code || ''}
+              onPaymentComplete={() => navigate(`/admin/detail-meja/${code}`)} 
+            />
+          </div>
+          <div>
+            <TableOrderItem code={code || ''}/>
+          </div>
           {/* Delete Confirmation Modal */}
           {showDeleteConfirm && renderDeleteConfirmModal()}
         </div>

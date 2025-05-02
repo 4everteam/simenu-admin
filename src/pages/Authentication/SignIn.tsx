@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../images/logo/logo.svg';
 import authImg from '../../images/authentication/image-signin.png';
-import { login } from '../../fetch/auth';
+import { getAuthURL, login } from '../../fetch/auth';
 
 interface LoginData {
   email: string;
@@ -79,7 +79,7 @@ const SignIn: React.FC = () => {
         
         setError(null);
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate('/admin/dashboard');
         }, 2000);
       } else {
         throw new Error('Gagal login');
@@ -91,13 +91,45 @@ const SignIn: React.FC = () => {
     }
   };
 
+  const handleLoginGoogle = async () => {
+    try {
+      const response = await getAuthURL();
+      if (response && typeof response === 'object' && 'errors' in response) {
+        if (Array.isArray(response.errors)) {
+          const newFormErrors: FormError = {};
+          response.errors.forEach((err: { field: string; message: string }) => {
+            if (err.field) {
+              newFormErrors[err.field as keyof FormError] = err.message;
+            }
+          });
+          setFormErrors(newFormErrors);
+        } else if (typeof response.errors === 'object') {
+          const newFormErrors: FormError = {};
+          Object.entries(response.errors).forEach(([field, message]) => {
+            newFormErrors[field as keyof FormError] = message as string;
+          });
+          setFormErrors(newFormErrors);
+        } else if (typeof response.errors === 'string') {
+          setError(response.errors);
+        }
+      } else if (response && typeof response === 'object' && 'url' in response) {
+        setError(null);
+        window.location.href = response.url;
+      } else {
+        throw new Error('Gagal login');
+      }
+    } catch (err) {
+      setError(`Terjadi kesalahan saat login google: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  }
+
   return (
     <div className="flex h-screen flex-wrap items-center justify-center bg-gray-2 dark:bg-boxdark-2">
       <div className="w-full xl:w-[96%] 2xl:w-[90%] flex h-[95vh] overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="hidden w-full xl:block xl:w-1/2">
           <div className="py-17.5 px-26 text-center h-full flex flex-col items-center justify-center">
             <Link className="mb-5.5 inline-block" to="/">
-              <img className="w-50" src={Logo} alt="Logo" />
+              <img className="w-45" src={Logo} alt="Logo" />
             </Link>
 
             <p className="2xl:px-20 text-lg">
@@ -124,7 +156,7 @@ const SignIn: React.FC = () => {
             
             <span className="mb-1.5 block font-medium">Selamat Datang</span>
             <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-              Masuk ke siMenuAdmin
+              Masuk ke siMenu Admin
             </h2>
 
             <form onSubmit={handleSubmit} noValidate>
@@ -239,6 +271,7 @@ const SignIn: React.FC = () => {
               </div>
 
               <button 
+                onClick={handleLoginGoogle}
                 type="button"
                 className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50"
               >

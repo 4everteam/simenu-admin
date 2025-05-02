@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { ReactNode, useEffect, useState } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import Loader from './common/Loader';
 import PageTitle from './components/PageTitle';
@@ -22,6 +22,35 @@ import FormCategoryManagement from './pages/CategoryManagement/FormCategoryManag
 import DetailProduct from './pages/ProductManagement/DetailProduct';
 import InventoryManagement from './pages/InventoryManagement/InventoryManagement';
 import FormInventoryManagement from './pages/InventoryManagement/FormInventoryManagement';
+import AuthCallback from './pages/Authentication/AuthCallback';
+import Error404 from './pages/Error/404';
+import Error401 from './pages/Error/401';
+import useAuth from './hooks/AuthCheck';
+import CreateOrder from './pages/OrderManagement/CreateOrder';
+import DetailOrder from './pages/OrderManagement/DetailOrder';
+import OrderManagement from './pages/OrderManagement/OrderManagement';
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
+
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  const { isLoggedIn, role } = useAuth();
+  if (isLoggedIn === null) {
+    return <Loader />;
+  }
+  
+  if (role === 'Guest') {
+    return <Navigate to="/401" replace />;
+  }
+  
+  if (!isLoggedIn || role !== 'Admin') {
+    return <Navigate to="/admin/auth/signin" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,8 +69,28 @@ function App() {
   ) : (
     <>
       <Routes>
+        {/* 404 Route - This should be the last route */}
         <Route
-          path="/auth/signin"
+          path="*"
+          element={
+            <>
+              <PageTitle title="Halaman Tidak Ditemukan | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
+              <Error404 />
+            </>
+          }
+        />
+        {/* 404 Route - This should be the last route */}
+        <Route
+          path="/401"
+          element={
+            <>
+              <PageTitle title="Tidak memiliki akses | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
+              <Error401 />
+            </>
+          }
+        />
+        <Route
+          path="/admin/auth/signin"
           element={
             <>
               <PageTitle title="Signin | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
@@ -49,36 +98,39 @@ function App() {
             </>
           }
         />
-        <Route element={<DefaultLayout />}>
+        <Route
+          path="/auth/callback"
+          element={
+            <>
+              <AuthCallback />
+            </>
+          }
+        />
+        <Route element={
+          <ProtectedRoute>
+            <DefaultLayout />
+          </ProtectedRoute>
+          }>
           <Route
-            path='/dashboard'
+            path='/admin/dashboard'
             element={
               <>
-                <PageTitle title="eCommerce Dashboard | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
+                <PageTitle title="Dashboard | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
                 <ECommerce />
               </>
             }
           />
           <Route
-            path="/calendar"
+            index
             element={
               <>
-                <PageTitle title="Calendar | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
-                <Calendar />
+                <PageTitle title="Dashboard | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
+                <ECommerce />
               </>
             }
           />
           <Route
-            path="/tables"
-            element={
-              <>
-                <PageTitle title="Kelola Meja | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
-                <Tables />
-              </>
-            }
-          />
-          <Route
-            path="/kelola-kategori"
+            path="/admin/kelola-kategori"
             element={
               <>
                 <PageTitle title="Kelola Kategori | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -87,7 +139,7 @@ function App() {
             }
           />
           <Route
-            path="/tambah-kelola-kategori"
+            path="/admin/tambah-kelola-kategori"
             element={
               <>
                 <PageTitle title="Kelola Produk | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -96,7 +148,7 @@ function App() {
             }
           />
           <Route
-            path="/update-kelola-kategori/:id"
+            path="/admin/update-kelola-kategori/:id"
             element={
               <>
                 <PageTitle title="Kelola Produk | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -105,7 +157,7 @@ function App() {
             }
           />
           <Route
-            path="/kelola-produk"
+            path="/admin/kelola-produk"
             element={
               <>
                 <PageTitle title="Kelola Produk | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -114,7 +166,7 @@ function App() {
             }
           />
           <Route
-            path="/detail-produk/:id"
+            path="/admin/detail-produk/:id"
             element={
               <>
                 <PageTitle title="Kelola Produk | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -123,7 +175,7 @@ function App() {
             }
           />
           <Route
-            path="/tambah-kelola-produk"
+            path="/admin/tambah-kelola-produk"
             element={
               <>
                 <PageTitle title="Kelola Produk | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -132,7 +184,7 @@ function App() {
             }
           />
           <Route
-            path="/update-kelola-produk/:id"
+            path="/admin/update-kelola-produk/:id"
             element={
               <>
                 <PageTitle title="Kelola Produk | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -141,7 +193,7 @@ function App() {
             }
           />
           <Route
-            path="/kelola-inventaris"
+            path="/admin/kelola-inventaris"
             element={
               <>
                 <PageTitle title="Kelola Inventaris | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -150,7 +202,7 @@ function App() {
             }
           />
           <Route
-            path="/tambah-kelola-inventaris"
+            path="/admin/tambah-kelola-inventaris"
             element={
               <>
                 <PageTitle title="Kelola Produk | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -159,7 +211,7 @@ function App() {
             }
           />
           <Route
-            path="/update-kelola-inventaris/:id"
+            path="/admin/update-kelola-inventaris/:id"
             element={
               <>
                 <PageTitle title="Kelola Produk | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -168,7 +220,7 @@ function App() {
             }
           />
           <Route
-            path="/kelola-meja"
+            path="/admin/kelola-meja"
             element={
               <>
                 <PageTitle title="Kelola Meja | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -177,7 +229,7 @@ function App() {
             }
           />
           <Route
-            path="/detail-meja/:code"
+            path="/admin/detail-meja/:code"
             element={
               <>
                 <PageTitle title="Detail Kelola Meja | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -186,7 +238,7 @@ function App() {
             }
           />
           <Route
-            path="/tambah-kelola-meja"
+            path="/admin/tambah-kelola-meja"
             element={
               <>
                 <PageTitle title="Kelola Meja | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -195,7 +247,7 @@ function App() {
             }
           />
           <Route
-            path="/update-kelola-meja/:code"
+            path="/admin/update-kelola-meja/:code"
             element={
               <>
                 <PageTitle title="Kelola Meja | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
@@ -204,7 +256,34 @@ function App() {
             }
           />
           <Route
-            path="/settings"
+            path="/admin/kelola-pesanan"
+            element={
+              <>
+                <PageTitle title="Kelola Pesanan | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
+                <OrderManagement />
+              </>
+            }
+          />
+          <Route
+            path="/admin/detail-pesanan/:id"
+            element={
+              <>
+                <PageTitle title="Detail Kelola Pesanan | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
+                <DetailOrder />
+              </>
+            }
+          />
+          <Route
+            path="/admin/tambah-pesanan"
+            element={
+              <>
+                <PageTitle title="Kelola Meja | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
+                <CreateOrder titlePage="Tambah Meja Baru"/>
+              </>
+            }
+          />
+          <Route
+            path="/admin/settings"
             element={
               <>
                 <PageTitle title="Settings | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
@@ -213,29 +292,11 @@ function App() {
             }
           />
           <Route
-            path="/chart"
+            path="/admin/chart"
             element={
               <>
                 <PageTitle title="Basic Chart | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
                 <Chart />
-              </>
-            }
-          />
-          <Route
-            path="/ui/alerts"
-            element={
-              <>
-                <PageTitle title="Alerts | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
-                <Alerts />
-              </>
-            }
-          />
-          <Route
-            path="/ui/buttons"
-            element={
-              <>
-                <PageTitle title="Buttons | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu" />
-                <Buttons />
               </>
             }
           />
