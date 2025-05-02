@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import { getMenuItems, getCategories } from '../../fetch/menu-management';
-import { createOrder } from '../../fetch/order-management';
+import { orderMenu } from '../../fetch/order-management';
 import { formatRupiah } from '../../utils/formatCurrency';
 import { debounce } from 'lodash';
 
@@ -213,7 +213,7 @@ const CreateOrder = () => {
         }))
       };
       
-      const response = await createOrder(orderData);
+      const response = await orderMenu(orderData);
       
       if (response && response.order_id) {
         // Redirect to order details page
