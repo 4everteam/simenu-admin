@@ -478,59 +478,64 @@ const DetailTable = () => {
               </div>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 gap-9 md:grid-cols-2">
-            {/* Table Details Section */}
-            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-              <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-                <h3 className="font-medium text-black dark:text-white">
-                  Detail Meja
-                </h3>
-              </div>
-              <div className="p-6.5">
-                <div className="mb-4.5">
-                  <div className="flex flex-col gap-6">
-                    <div className="flex justify-between border-b border-stroke pb-5 dark:border-strokedark">
-                      <span className="font-medium text-black dark:text-white">ID</span>
-                      <span className="text-sm text-black dark:text-white">{tableData.id}</span>
-                    </div>
-                    <div className="flex justify-between border-b border-stroke pb-5 dark:border-strokedark">
-                      <span className="font-medium text-black dark:text-white">Kode Meja</span>
-                      <span className="text-sm text-black dark:text-white">{tableData.code}</span>
-                    </div>
-                    <div className="flex justify-between border-b border-stroke pb-5 dark:border-strokedark">
-                      <span className="font-medium text-black dark:text-white">Status</span>
-                      <span className={`text-sm ${
-                        tableData.status === 'tersedia' 
-                          ? 'text-success' 
-                          : tableData.status === 'terisi' 
-                            ? 'text-danger' 
-                            : 'text-warning'
-                      }`}>
-                        {capitalizeFirstLetter(tableData.status)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium text-black dark:text-white">Kapasitas</span>
-                      <span className="text-sm text-black dark:text-white">{tableData.capacity} orang</span>
+          
+          {tableData.status !== 'maintenance' && (
+            <>
+              <div className="grid grid-cols-1 gap-9 md:grid-cols-2">
+                {/* Table Details Section */}
+                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                  <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+                    <h3 className="font-medium text-black dark:text-white">
+                      Detail Meja
+                    </h3>
+                  </div>
+                  <div className="p-6.5">
+                    <div className="mb-4.5">
+                      <div className="flex flex-col gap-6">
+                        <div className="flex justify-between border-b border-stroke pb-5 dark:border-strokedark">
+                          <span className="font-medium text-black dark:text-white">ID</span>
+                          <span className="text-sm text-black dark:text-white">{tableData.id}</span>
+                        </div>
+                        <div className="flex justify-between border-b border-stroke pb-5 dark:border-strokedark">
+                          <span className="font-medium text-black dark:text-white">Kode Meja</span>
+                          <span className="text-sm text-black dark:text-white">{tableData.code}</span>
+                        </div>
+                        <div className="flex justify-between border-b border-stroke pb-5 dark:border-strokedark">
+                          <span className="font-medium text-black dark:text-white">Status</span>
+                          <span className={`text-sm ${
+                            tableData.status === 'tersedia' 
+                              ? 'text-success' 
+                              : tableData.status === 'terisi' 
+                                ? 'text-danger' 
+                                : 'text-warning'
+                          }`}>
+                            {capitalizeFirstLetter(tableData.status)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-medium text-black dark:text-white">Kapasitas</span>
+                          <span className="text-sm text-black dark:text-white">{tableData.capacity} orang</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* QR Generator Section */}
-            {renderQRCode()}
-          </div>
-          <div>
-            <PaymentBill
-              tableCode={code || ''}
-              onPaymentComplete={() => navigate(`/admin/detail-meja/${code}`)} 
-            />
-          </div>
-          <div>
-            <TableOrderItem code={code || ''}/>
-          </div>
+                {/* QR Generator Section */}
+                {renderQRCode()}
+              </div>
+              <div>
+                <PaymentBill
+                  tableCode={code || ''}
+                  onPaymentComplete={() => navigate(`/admin/detail-meja/${code}`)} 
+                />
+              </div>
+              <div>
+                <TableOrderItem code={code || ''}/>
+              </div>
+            </>
+          )}
+          
           {/* Delete Confirmation Modal */}
           {showDeleteConfirm && renderDeleteConfirmModal()}
         </div>
