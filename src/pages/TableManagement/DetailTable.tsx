@@ -479,7 +479,7 @@ const DetailTable = () => {
             </div>
           </div>
           
-          {tableData.status !== 'maintenance' && (
+          {tableData.status !== 'maintenance' ? (
             <>
               <div className="grid grid-cols-1 gap-9 md:grid-cols-2">
                 {/* Table Details Section */}
@@ -534,6 +534,39 @@ const DetailTable = () => {
                 <TableOrderItem code={code || ''}/>
               </div>
             </>
+          ) : (
+            <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-6.5">
+              <div className="flex flex-col items-center justify-center text-center">
+                <div className="mb-4">
+                  <svg
+                    className="h-16 w-16 text-warning"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                    />
+                  </svg>
+                </div>
+                <h3 className="mb-2 text-xl font-semibold text-black dark:text-white">
+                  Table Under Maintenance
+                </h3>
+                <p className="mb-6 text-sm text-body dark:text-bodydark">
+                  This table is currently unavailable due to maintenance work.
+                  Please check back later or contact support for more information.
+                </p>
+                <Link
+                  to="/admin/kelola-meja"
+                  className="inline-flex items-center justify-center rounded-md bg-primary py-2 px-6 text-white hover:bg-opacity-90"
+                >
+                  Return to Table List
+                </Link>
+              </div>
+            </div>
           )}
           
           {/* Delete Confirmation Modal */}
