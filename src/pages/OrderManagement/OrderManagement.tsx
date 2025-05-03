@@ -47,7 +47,6 @@ const OrderManagement = () => {
       setError(null);
       
       const response = await getOrders();
-      console.log(response);
       if (response) {
         setOrders(response);
       }else {
@@ -68,7 +67,7 @@ const OrderManagement = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Kelola Meja" />
+      <Breadcrumb pageName="Kelola Pesanan" />
       <div className="flex flex-col gap-10">
         {loading ? (
           <div className="text-center py-4">Loading...</div>
