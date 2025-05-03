@@ -7,8 +7,9 @@ interface ResponseData {
 }
 
 interface dataOrderMenu {
+  id?: string;
   on_behalf: string;
-  table_id: string;
+  order_type: string;
   items : {
     product_id: string;
     quantity: number;
@@ -174,9 +175,15 @@ export const updateOrderItemStatus = async (data: { itemId: number, newStatus: s
 export const orderMenu = async (data : dataOrderMenu, headers = {}) => {
   try {
     const API_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';
-    const response = await axios.post<ResponseData>(`${API_URL}/api/v1/orders`, data, {
+    const userData = JSON.parse(localStorage.getItem('user_data') ?? '{}');
+    if(!userData.token) {
+      console.error('Request to server failed, token not provided')
+      return;
+    }
+    const response = await axios.post<ResponseData>(`${API_URL}/api/v1/orders/make-order`, data, {
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userData.token}`,
             ...headers
         },
     });

@@ -20,6 +20,7 @@ interface OrderItem {
 interface OrderData {
   order_id: string;
   table_id: number;
+  table_code:string;
   on_behalf: string;
   type: string;
   status: string;
@@ -46,11 +47,11 @@ const OrderManagement = () => {
       setError(null);
       
       const response = await getOrders();
-      
-      if (response && Array.isArray(response)) {
+      console.log(response);
+      if (response) {
         setOrders(response);
-      } else {
-        throw new Error('Invalid response format');
+      }else {
+        setError('Failed to fetch order data');
       }
     } catch (err) {
       console.error('Error fetching orders:', err);
@@ -76,7 +77,7 @@ const OrderManagement = () => {
         ) : (
           <Table
             data={orders} 
-            addButton={{ text: "Buat Pesanan Baru", link: "/admin/create-order" }}
+            addButton={{ text: "Buat Pesanan Baru", link: "/admin/tambah-pesanan" }}
           />
         )}
       </div>

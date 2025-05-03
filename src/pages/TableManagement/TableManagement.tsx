@@ -54,7 +54,7 @@ const TableManagement = () => {
           <Table 
             columns={["ID", "Kode Meja", "Status", "Kapasitas", "Action"]}           
             data={data} 
-            addButton={{ text: "Tambah Meja", link: "/tambah-kelola-meja" }}
+            addButton={{ text: "Tambah Meja", link: "/admin/tambah-kelola-meja" }}
           />
         )}
       </div>

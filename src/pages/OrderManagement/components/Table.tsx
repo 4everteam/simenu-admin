@@ -21,6 +21,7 @@ interface OrderItem {
 interface OrderData {
   order_id: string;
   table_id: number;
+  table_code: string;
   on_behalf: string;
   type: string;
   status: string;
@@ -69,7 +70,7 @@ const Table = ({
       setDeleteLoading(true);
       setError(null);
       
-      const response = await deleteOrder({ id: selectedId });
+      const response = await deleteOrder({ id: selectedId.replace(/\//g, '|') });
       
       if (response) {
         // Use onRefresh callback instead of navigate(0)
@@ -88,9 +89,9 @@ const Table = ({
     }
   };
 
-  const renderActionButtons = (id: string, tableCode: number) => (
+  const renderActionButtons = (id: string, tableCode: string) => (
     <div className="flex items-center space-x-3.5">
-      <Link to={`/admin/detail-pesanan/${id.replace(/\//g, '|')}`} className="hover:text-primary">
+      <Link to={tableCode ? `/admin/detail-meja/${tableCode}`  : `/admin/detail-pesanan/${id.replace(/\//g, '|')}`} className="hover:text-primary">
         <svg
           className="fill-current"
           width="18"
@@ -277,7 +278,7 @@ const Table = ({
                     {renderStatusBadge(order.status || 'pending')}
                   </td>
                   <td className="py-5 px-4 dark:border-strokedark">
-                    {renderActionButtons(order.order_id, order.table_id)}
+                    {renderActionButtons(order.order_id, order.table_code)}
                   </td>
                 </tr>
               ))

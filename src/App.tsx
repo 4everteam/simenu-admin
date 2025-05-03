@@ -278,7 +278,16 @@ function App() {
             element={
               <>
                 <PageTitle title="Kelola Meja | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
-                <CreateOrder titlePage="Tambah Meja Baru"/>
+                <CreateOrder />
+              </>
+            }
+          />
+          <Route
+            path="/admin/edit-pesanan/:id"
+            element={
+              <>
+                <PageTitle title="Kelola Meja | siMenuAdmin - Scan, Pesan, Santai! Semua Mudah dengan siMenu " />
+                <CreateOrder />
               </>
             }
           />

@@ -54,7 +54,7 @@ const ProductManagement = () => {
           <Table 
             columns={["ID", "Nama Produk", "Deskripsi", "Harga", "Kategori", "Gambar", "Status", "Action"]}           
             data={data} 
-            addButton={{ text: "Tambah Produk", link: "/tambah-kelola-produk" }}
+            addButton={{ text: "Tambah Produk", link: "/admin/tambah-kelola-produk" }}
           />
         )}
       </div>

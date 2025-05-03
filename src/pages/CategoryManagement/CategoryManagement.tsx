@@ -54,7 +54,7 @@ const CategoryManagement = () => {
           <Table 
             columns={["ID", "Logo", "Nama", "Action"]}           
             data={data} 
-            addButton={{ text: "Tambah Kategori", link: "/tambah-kelola-kategori" }}
+            addButton={{ text: "Tambah Kategori", link: "/admin/tambah-kelola-kategori" }}
           />
         )}
       </div>

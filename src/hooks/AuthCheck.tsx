@@ -80,7 +80,6 @@ const useAuth = (): AuthState => {
         }
         
         const response = await isLoggedIn();
-        
         if (!isMounted) return;
         
         if (response && typeof response === 'object' && 'errors' in response) {
@@ -100,7 +99,7 @@ const useAuth = (): AuthState => {
           'isLoggedIn' in response && 
           'role' in response
         ) {
-          if (response.role !== 'Admin') {
+          if (response.role !== 'Admin' && response.role !== 'admin') {
             setAuthState({
               role: 'Guest',
               isLoggedIn: false,

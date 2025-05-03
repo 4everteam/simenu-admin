@@ -309,6 +309,7 @@ const FormProductManagement = ({ titlePage }: FormProductManagementProps) => {
                       name="stock"
                       onChange={handleChange}
                       min={1}
+                      value={productData.stock}
                       placeholder="Masukkan stock produk"
                       className={`w-full rounded border-[1.5px] ${
                         formErrors.stock ? 'border-danger' : 'border-stroke'

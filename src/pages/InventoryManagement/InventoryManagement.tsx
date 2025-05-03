@@ -57,7 +57,7 @@ const InventoryManagement = () => {
           <Table 
             columns={["ID", "Nama Produk", "Stok", "Batas Minimum", "Status", "Action"]}           
             data={data} 
-            addButton={{ text: "Tambah Inventaris", link: "/tambah-kelola-inventaris" }}
+            addButton={{ text: "Tambah Inventaris", link: "/admin/tambah-kelola-inventaris" }}
           />
         )}
       </div>
