@@ -192,8 +192,25 @@ const CreateOrder = () => {
   // Debounced search handler
   const debouncedSearch = useCallback(
     debounce((value: string) => {
-      setSearchQuery(value);
-    }, 3000),[]
+      let filtered = [...menuItems];
+      
+      // Filter by category first
+      if (selectedCategory !== 'all') {
+        filtered = filtered.filter(item => item.category_id === selectedCategory);
+      }
+      
+      // Then filter by search query if exists
+      if (value.trim()) {
+        const query = value.toLowerCase();
+        filtered = filtered.filter(item => 
+          item.name.toLowerCase().includes(query) || 
+          item.description.toLowerCase().includes(query)
+        );
+      }
+      
+      setFilteredItems(filtered);
+    }, 300),
+    [menuItems, selectedCategory]
   );
   
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,6 +219,7 @@ const CreateOrder = () => {
 
   const handleCategoryChange = (categoryId: string) => {
     setSelectedCategory(categoryId);
+    debouncedSearch(searchQuery);
   };
 
   const handleNoteChange = (itemId: string, note: string) => {

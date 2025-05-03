@@ -223,7 +223,7 @@ const ECommerce: React.FC = () => {
           <path d="M3 10h18" />
           <path d="M10 3v18" />
         </svg>
-      </CardDataStats>
+        </CardDataStats>
 
         <CardDataStats
           title="Peak Hour"
@@ -258,10 +258,25 @@ const ECommerce: React.FC = () => {
         </CardDataStats>
       </div>
 
+      {/* Add loading check for charts */}
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <ChartOne data={salesData} />
-        <ChartTwo data={peakHours} />
-        <ChartThree data={popularMenu} />
+        {loading ? (
+          <div className="col-span-12 flex items-center justify-center">
+            <div className="text-center">Loading charts...</div>
+          </div>
+        ) : (
+          <>
+            {salesData && salesData.length > 0 && (
+              <ChartOne data={salesData} />
+            )}
+            {peakHours && peakHours.length > 0 && (
+              <ChartTwo data={peakHours} />
+            )}
+            {popularMenu && popularMenu.length > 0 && (
+              <ChartThree data={popularMenu} />
+            )}
+          </>
+        )}
       </div>
     </>
   );
