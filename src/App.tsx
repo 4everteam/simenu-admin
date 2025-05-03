@@ -44,7 +44,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     return <Navigate to="/401" replace />;
   }
   
-  if (!isLoggedIn || role !== 'Admin') {
+  if (!isLoggedIn || (role !== 'Admin' && role !== 'admin')) {
     return <Navigate to="/admin/auth/signin" replace />;
   }
   
