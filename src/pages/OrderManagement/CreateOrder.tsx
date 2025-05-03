@@ -192,9 +192,14 @@ const CreateOrder = () => {
   // Debounced search handler
   const debouncedSearch = useCallback(
     debounce((value: string) => {
-      setSearchQuery(value);
+      if (!value.trim()) {
+        // If search is empty, show all items
+        setFilteredItems(menuItems);
+      } else {
+        setSearchQuery(value);
+      }
     }, 300),
-    []
+    [menuItems] // Add menuItems as dependency
   );
   
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -431,11 +436,12 @@ const CreateOrder = () => {
             
             {/* Customer Name Input */}
             <div className="relative">
-              <input
+            <input
                 type="text"
                 placeholder="Customer name..."
                 value={customerName}
-                onChange={(e) => setCustomerName(e.target.value)}
+                onChange={(e) => setCustomerName(e.target.value.replace(/\s+/g, ' '))}
+                onBlur={(e) => setCustomerName(e.target.value.trim())}
                 className="w-full rounded-lg border border-stroke bg-transparent py-3 pl-10 pr-4 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
               />
               <span className="absolute left-3 top-3.5 text-gray-500">
