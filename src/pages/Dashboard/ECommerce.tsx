@@ -35,25 +35,35 @@ const ECommerce: React.FC = () => {
         
   const getDateRange = (filter: typeof timeFilter) => {
     const today = new Date();
-    const startDate = new Date();
-    
+    const startDate = new Date(today); // clone today
+  
     switch (filter) {
       case 'daily':
-        startDate.setDate(today.getDate() - 7);
+        // hanya hari ini → start = end = today
         break;
+  
       case 'weekly':
-        startDate.setDate(today.getDate() - 28);
+        // mundur 6 hari → total 7 hari
+        startDate.setDate(today.getDate() - 6);
         break;
+  
       case 'monthly':
-        startDate.setMonth(today.getMonth() - 6);
+        // dari awal tahun ini (1 Januari)
+        startDate.setMonth(0); // bulan Januari (0-indexed)
+        startDate.setDate(1);  // tanggal 1
         break;
+        
+      default:
+        throw new Error(`Unknown filter: ${filter}`);
     }
-
+  
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+  
     return {
-      start_date: startDate.toISOString().split('T')[0],
-      end_date: today.toISOString().split('T')[0]
+      start_date: formatDate(startDate),
+      end_date: formatDate(today),
     };
-  };
+  };  
 
   const fetchDashboardData = async () => {
     setLoading(true);
