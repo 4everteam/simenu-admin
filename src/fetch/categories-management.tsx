@@ -73,7 +73,7 @@ export const getCategory = async (data: { id: number }, headers = {}) => {
   }
 }
 
-export const createCategory = async (categoryData: { name: string }, headers = {}) => {
+export const createCategory = async (categoryData: { logo: string }, headers = {}) => {
   try {
     const API_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';
     const userData = JSON.parse(localStorage.getItem('user_data') ?? '{}');

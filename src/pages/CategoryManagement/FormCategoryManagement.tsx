@@ -100,10 +100,9 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
         }));
       } else {
         // If no color info, add it
-        const fullIconValue = `${value}, color:${iconColor}`;
         setCategoryData(prev => ({
           ...prev,
-          [name]: fullIconValue
+          [name]: value
         }));
       }
     } else {
@@ -127,7 +126,7 @@ const FormCategoryManagement = ({ titlePage }: FormCategoryManagementProps) => {
       if (id) {
         response = await updateCategory({ ...categoryData, id: Number(id) });
       } else {
-        response = await createCategory(categoryData);
+        response = await createCategory({ ...categoryData, logo: `${categoryData.logo}, color: ${iconColor}`});
       }
       if (response && typeof response === 'object' && 'errors' in response) {
         if (Array.isArray(response.errors)) {
