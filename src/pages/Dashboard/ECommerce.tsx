@@ -5,6 +5,7 @@ import ChartThree from '../../components/Charts/ChartThree';
 import ChartTwo from '../../components/Charts/ChartTwo';
 import { getSalesReport, getPopularMenu, getPeakHours, getTableUsage } from '../../fetch/report-management';
 import { formatRupiah } from '../../utils/formatCurrency';
+import ChartFour from '../../components/Charts/ChartFour';
 
 const ECommerce: React.FC = () => {
   const [timeFilter, setTimeFilter] = useState<'daily' | 'weekly' | 'monthly'>('daily');
@@ -218,11 +219,21 @@ const ECommerce: React.FC = () => {
         * 100).toFixed(2)}%`}
         levelUp={tableUsage?.length && tableUsage[tableUsage.length - 1].total_orders > tableUsage[0].total_orders}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
-          <path d="M3 10h18" />
-          <path d="M10 3v18" />
-        </svg>
+        <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="24" 
+            height="24" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="#3B82F6" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z" />
+            <path d="M3 10h18" />
+            <path d="M10 3v18" />
+          </svg>
         </CardDataStats>
 
         <CardDataStats
@@ -258,25 +269,11 @@ const ECommerce: React.FC = () => {
         </CardDataStats>
       </div>
 
-      {/* Add loading check for charts */}
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        {loading ? (
-          <div className="col-span-12 flex items-center justify-center">
-            <div className="text-center">Loading charts...</div>
-          </div>
-        ) : (
-          <>
-            {salesData && salesData.length > 0 && (
-              <ChartOne data={salesData} />
-            )}
-            {peakHours && peakHours.length > 0 && (
-              <ChartTwo data={peakHours} />
-            )}
-            {popularMenu && popularMenu.length > 0 && (
-              <ChartThree data={popularMenu} />
-            )}
-          </>
-        )}
+        <ChartOne data={salesData} />
+        <ChartTwo data={peakHours} />
+        <ChartThree data={popularMenu} />
+        <ChartFour data={tableUsage} />
       </div>
     </>
   );

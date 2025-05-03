@@ -1,12 +1,14 @@
 import { ApexOptions } from 'apexcharts';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { formatRupiah } from '../../utils/formatCurrency';
 
+// Updated interface to match the actual API response
 interface SalesData {
-  date: string;
+  period: string;
   total_sales: number;
   order_count: number;
+  items_sold: number;
 }
 
 interface ChartOneProps {
@@ -14,30 +16,75 @@ interface ChartOneProps {
 }
 
 const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
+  // Safely process chart data with proper validation
   const chartData = useMemo(() => {
-    if (!data?.length) return {
-      dates: [],
-      sales: [],
-      orders: []
-    };
+    if (!Array.isArray(data) || data.length === 0) {
+      return {
+        dates: [],
+        sales: [],
+        orders: [],
+        items: []
+      };
+    }
 
     return {
-      dates: data.map(item => new Date(item.date).toLocaleDateString('en-US', { 
+      dates: data.map(item => new Date(item.period).toLocaleDateString('en-US', { 
         month: 'short', 
         day: 'numeric' 
       })),
-      sales: data.map(item => item.total_sales),
-      orders: data.map(item => item.order_count)
+      sales: data.map(item => item.total_sales || 0),
+      orders: data.map(item => item.order_count || 0),
+      items: data.map(item => item.items_sold || 0)
     };
   }, [data]);
 
+  // Get date range for display
+  const dateRange = useMemo(() => {
+    if (!Array.isArray(data) || data.length === 0) return 'No data available';
+    
+    // Parse dates more safely
+    const parseDateSafely = (dateStr: string) => {
+      try {
+        // Try different date formats
+        const date = new Date(dateStr);
+        
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+          // Try parsing YYYY-MM-DD format
+          const parts = dateStr.split('-');
+          if (parts.length === 3) {
+            return new Date(
+              parseInt(parts[0]), 
+              parseInt(parts[1]) - 1, // Month is 0-indexed
+              parseInt(parts[2])
+            );
+          }
+          return null;
+        }
+        
+        return date;
+      } catch (e) {
+        console.error('Error parsing date:', dateStr, e);
+        return null;
+      }
+    };
+    
+    const firstDate = parseDateSafely(data[0].period);
+    const lastDate = parseDateSafely(data[data.length - 1].period);
+    
+    if (!firstDate || !lastDate) return 'Date range unavailable';
+    
+    return `${firstDate.toLocaleDateString()} - ${lastDate.toLocaleDateString()}`;
+  }, [data]);
+
+  // Chart options with improved configuration
   const options: ApexOptions = {
     legend: {
       show: true,
       position: 'top',
       horizontalAlign: 'left',
     },
-    colors: ['#3C50E0', '#80CAEE'],
+    colors: ['#3C50E0', '#80CAEE', '#5DDAB4'],
     chart: {
       fontFamily: 'Satoshi, sans-serif',
       height: 335,
@@ -52,6 +99,11 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
       },
       toolbar: {
         show: false,
+      },
+      animations: {
+        enabled: true,
+        easing: 'easeinout',
+        speed: 800,
       },
     },
     responsive: [
@@ -73,7 +125,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
       },
     ],
     stroke: {
-      width: [2, 2],
+      width: [2, 2, 2],
       curve: 'smooth',
     },
     grid: {
@@ -94,7 +146,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
     markers: {
       size: 4,
       colors: '#fff',
-      strokeColors: ['#3056D3', '#80CAEE'],
+      strokeColors: ['#3056D3', '#80CAEE', '#5DDAB4'],
       strokeWidth: 3,
       strokeOpacity: 0.9,
       strokeDashArray: 0,
@@ -121,6 +173,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
           text: 'Revenue (Rp)',
           style: {
             fontSize: '12px',
+            fontWeight: 500,
           },
         },
         labels: {
@@ -133,6 +186,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
           text: 'Orders',
           style: {
             fontSize: '12px',
+            fontWeight: 500,
           },
         },
         labels: {
@@ -146,12 +200,14 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
       y: {
         formatter: (value, { seriesIndex }) => {
           if (seriesIndex === 0) return formatRupiah(value);
-          return `${value} orders`;
+          if (seriesIndex === 1) return `${value} orders`;
+          return `${value} items`;
         }
       }
     }
   };
 
+  // Series data with proper fallbacks
   const series = [
     {
       name: 'Revenue',
@@ -160,16 +216,23 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
     {
       name: 'Orders',
       data: chartData.orders
+    },
+    {
+      name: 'Items Sold',
+      data: chartData.items
     }
   ];
 
-  // Get date range for display
-  const dateRange = useMemo(() => {
-    if (!data?.length) return 'No data available';
-    const firstDate = new Date(data[0].date).toLocaleDateString();
-    const lastDate = new Date(data[data.length - 1].date).toLocaleDateString();
-    return `${firstDate} - ${lastDate}`;
-  }, [data]);
+  // If no data is available, show a placeholder
+  if (!Array.isArray(data) || data.length === 0) {
+    return (
+      <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+        <div className="flex items-center justify-center h-64">
+          <p className="text-gray-500 dark:text-gray-400">No sales data available</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -193,11 +256,20 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
               <p className="text-sm font-medium">{dateRange}</p>
             </div>
           </div>
+          <div className="flex min-w-47.5">
+            <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-success">
+              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-success"></span>
+            </span>
+            <div className="w-full">
+              <p className="font-semibold text-success">Items Sold</p>
+              <p className="text-sm font-medium">{dateRange}</p>
+            </div>
+          </div>
         </div>
       </div>
 
       <div>
-        <div id="chartOne" className="-ml-5">
+        <div id="chartOne" className="-ml-5 mt-5">
           <ReactApexChart
             options={options}
             series={series}
