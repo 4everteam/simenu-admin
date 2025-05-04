@@ -525,13 +525,13 @@ const DetailTable = () => {
                 {renderQRCode()}
               </div>
               <div>
+                <TableOrderItem code={code || ''}/>
+              </div>
+              <div>
                 <PaymentBill
                   tableCode={code || ''}
                   onPaymentComplete={() => navigate(`/admin/detail-meja/${code}`)} 
                 />
-              </div>
-              <div>
-                <TableOrderItem code={code || ''}/>
               </div>
             </>
           ) : (
