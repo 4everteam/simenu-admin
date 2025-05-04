@@ -441,7 +441,7 @@ const DetailOrder = () => {
             </div>
             <div className="flex justify-end gap-2">
               <div className="relative">
-                <button 
+                {/* <button 
                   className="inline-flex items-center justify-center rounded-md border border-primary py-2 px-4 text-center font-medium text-primary hover:bg-primary hover:text-white"
                   disabled={statusUpdateLoading}
                   onClick={() => {
@@ -452,7 +452,7 @@ const DetailOrder = () => {
                   }}
                 >
                   {statusUpdateLoading ? 'Memperbarui...' : 'Ubah Status'}
-                </button>
+                </button> */}
                 <div 
                   id="statusDropdown" 
                   className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-boxdark z-10 hidden"

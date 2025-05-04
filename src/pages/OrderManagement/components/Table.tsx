@@ -89,9 +89,9 @@ const Table = ({
     }
   };
 
-  const renderActionButtons = (id: string, tableCode: string) => (
+  const renderActionButtons = (id: string, tableCode: string, status: string) => (
     <div className="flex items-center space-x-3.5">
-      <Link to={tableCode ? `/admin/detail-meja/${tableCode}`  : `/admin/detail-pesanan/${id.replace(/\//g, '|')}`} className="hover:text-primary">
+      <Link to={status !== 'completed' && tableCode ? `/admin/detail-meja/${tableCode}`  : `/admin/detail-pesanan/${id.replace(/\//g, '|')}`} className="hover:text-primary">
         <svg
           className="fill-current"
           width="18"
@@ -278,7 +278,7 @@ const Table = ({
                     {renderStatusBadge(order.status || 'pending')}
                   </td>
                   <td className="py-5 px-4 dark:border-strokedark">
-                    {renderActionButtons(order.order_id, order.table_code)}
+                    {renderActionButtons(order.order_id, order.table_code, order.status)}
                   </td>
                 </tr>
               ))
