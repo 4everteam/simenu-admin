@@ -270,6 +270,11 @@ const CreateOrder = () => {
       setError('Please add items to your order');
       return;
     }
+
+    if (customerName.trim() === '') {
+      setError('Tolong masukkan nama pelanggan');
+      return;
+    }
     
     try {
       setOrderLoading(true);

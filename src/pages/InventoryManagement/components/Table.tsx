@@ -60,7 +60,7 @@ const Table = ({
     if (stockQty <= 0) {
       return <span className="text-danger font-medium">Habis</span>;
     } else if (stockQty <= alertThreshold) {
-      return <span className="text-warning font-medium">Hampir Habis</span>;
+      return <span className="text-warning font-medium">Restock</span>;
     } else {
       return <span className="text-success font-medium">Tersedia</span>;
     }

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { formatRupiah } from '../../../utils/formatCurrency';
 import { getOrderItems } from '../../../fetch/order-management';
 import { processPayment } from '../../../fetch/payment-management';
+import { useNavigate } from 'react-router-dom';
 
 interface PaymentBillProps {
   tableCode: string;
@@ -41,6 +42,7 @@ const PaymentBill = ({ tableCode, onPaymentComplete }: PaymentBillProps) => {
   const [change, setChange] = useState<number>(0);
   const [processingPayment, setProcessingPayment] = useState<boolean>(false);
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false);
+  const navigate = useNavigate();
   
   const paymentMethods: PaymentMethod[] = [
     { id: 'cash', name: 'Cash' },
@@ -129,7 +131,7 @@ const PaymentBill = ({ tableCode, onPaymentComplete }: PaymentBillProps) => {
       const paid = parseInt(amountPaid.replace(/[^\d]/g, ''));
       
       if (isNaN(paid) || paid < totalAmount) {
-        setError('Amount paid must be equal to or greater than the total amount');
+        setError(`Jumlah pembayaran kurang dari total tagihan (${formatRupiah(totalAmount)})`);
         return;
       }
     }
@@ -162,8 +164,13 @@ const PaymentBill = ({ tableCode, onPaymentComplete }: PaymentBillProps) => {
             if (onPaymentComplete) {
               setTimeout(() => {
                 onPaymentComplete();
-              }, 2000);
+              }, 1000);
             }
+
+            // refresh page
+            setTimeout(() => {
+              navigate(0);
+            }, 2000);
         }
       } else {
         throw new Error(response?.message || 'Payment processing failed');

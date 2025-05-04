@@ -254,6 +254,8 @@ const DetailOrder = () => {
             }
         }else{
             setPaymentSuccess(true);
+            fetchOrderDetail();
+            setSuccess('Pembayaran berhasil');
         }
       } else {
         throw new Error(response?.message || 'Payment processing failed');
@@ -461,12 +463,6 @@ const DetailOrder = () => {
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       Menunggu
-                    </button>
-                    <button
-                      onClick={() => handleStatusChange('processing')}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    >
-                      Diproses
                     </button>
                     <button
                       onClick={() => handleStatusChange('completed')}
