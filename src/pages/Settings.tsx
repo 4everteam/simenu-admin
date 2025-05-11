@@ -198,7 +198,7 @@ const Settings = () => {
                       Cancel
                     </button>
                     <button
-                      className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90"
+                      className="flex justify-center rounded bg-[#6A1B4D] py-2 px-6 font-medium text-gray hover:bg-opacity-90"
                       type="submit"
                     >
                       Save

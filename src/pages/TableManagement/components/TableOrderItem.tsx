@@ -153,7 +153,7 @@ const TableOrderItem = ({
       <div className="mb-4 flex justify-between items-center">
         <h4 className="text-xl font-semibold text-black dark:text-white">List Menu Pesanan</h4>
         {addButton.link && (
-          <Link to={addButton.link} className="inline-flex items-center justify-center rounded-md bg-primary py-2 px-4 text-center font-medium text-white hover:bg-opacity-90">
+          <Link to={addButton.link} className="inline-flex items-center justify-center rounded-md bg-[#6A1B4D] py-2 px-4 text-center font-medium text-white hover:bg-opacity-90">
             <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>

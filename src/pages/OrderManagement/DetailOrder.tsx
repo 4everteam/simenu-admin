@@ -351,7 +351,7 @@ const DetailOrder = () => {
           <p className="text-danger">{error}</p>
           <button 
             onClick={fetchOrderDetail}
-            className="mt-4 inline-flex items-center justify-center rounded-md bg-primary py-2 px-4 text-center font-medium text-white hover:bg-opacity-90"
+            className="mt-4 inline-flex items-center justify-center rounded-md bg-[#6A1B4D] py-2 px-4 text-center font-medium text-white hover:bg-opacity-90"
           >
             Coba Lagi
           </button>
@@ -442,7 +442,7 @@ const DetailOrder = () => {
             <div className="flex justify-end gap-2">
               <div className="relative">
                 {/* <button 
-                  className="inline-flex items-center justify-center rounded-md border border-primary py-2 px-4 text-center font-medium text-primary hover:bg-primary hover:text-white"
+                  className="inline-flex items-center justify-center rounded-md border border-primary py-2 px-4 text-center font-medium text-primary hover:bg-[#6A1B4D] hover:text-white"
                   disabled={statusUpdateLoading}
                   onClick={() => {
                     const dropdown = document.getElementById('statusDropdown');
@@ -661,7 +661,7 @@ const DetailOrder = () => {
               <div className="mt-6">
                 <button
                   onClick={() => window.print()}
-                  className="w-full inline-flex items-center justify-center rounded-md bg-primary py-2 px-4 text-center font-medium text-white hover:bg-opacity-90"
+                  className="w-full inline-flex items-center justify-center rounded-md bg-[#6A1B4D] py-2 px-4 text-center font-medium text-white hover:bg-opacity-90"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -799,7 +799,7 @@ const DetailOrder = () => {
               <button
                 onClick={handleProcessPayment}
                 disabled={processingPayment || !amountPaid || (paymentMethod === 'cash' && Number(amountPaid.replace(/[^\d]/g, '')) < orderData.total_amount)}
-                className="w-full flex justify-center rounded bg-primary py-3 px-6 font-medium text-white hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center rounded bg-[#6A1B4D] py-3 px-6 font-medium text-white hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
               >
                 {processingPayment ? 'Processing...' : 'Process Payment'}
               </button>

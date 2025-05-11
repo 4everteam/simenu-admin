@@ -236,7 +236,7 @@ const DetailTable = () => {
               REVIEWS AND COMMENTS<br>ARE APPRECIATED!
             </div>
           </div>
-          <button onclick="window.print();return false;" class="print-button" style="padding: 10px 20px; background: #3C50E0; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;">
+          <button onclick="window.print();return false;" class="print-button" style="padding: 10px 20px; background: #6A1B4D; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;">
             Print QR Code
           </button>
         </body>
@@ -325,7 +325,7 @@ const DetailTable = () => {
         </div>
         <button 
           onClick={() => tableData && regenerateQR(tableData.code)}
-          className="inline-flex items-center justify-center rounded-md border border-primary py-1 px-2 text-center font-medium text-primary hover:bg-primary hover:text-white text-sm"
+          className="inline-flex items-center justify-center rounded-md border border-primary py-1 px-2 text-center font-medium text-primary hover:bg-[#6A1B4D] hover:text-white text-sm"
         >
           Generate QR Code
         </button>
@@ -465,7 +465,7 @@ const DetailTable = () => {
               <div className="flex justify-end">
                 <Link 
                   to={`/admin/update-kelola-meja/${tableData.code}`} 
-                  className="inline-flex items-center justify-center rounded-md border border-primary py-2 px-4 text-center font-medium text-primary hover:bg-primary hover:text-white mr-2"
+                  className="inline-flex items-center justify-center rounded-md border border-primary py-2 px-4 text-center font-medium text-primary hover:bg-[#6A1B4D] hover:text-white mr-2"
                 >
                   Edit Meja
                 </Link>
@@ -561,7 +561,7 @@ const DetailTable = () => {
                 </p>
                 <Link
                   to="/admin/kelola-meja"
-                  className="inline-flex items-center justify-center rounded-md bg-primary py-2 px-6 text-white hover:bg-opacity-90"
+                  className="inline-flex items-center justify-center rounded-md bg-[#6A1B4D] py-2 px-6 text-white hover:bg-opacity-90"
                 >
                   Return to Table List
                 </Link>

@@ -148,7 +148,7 @@ const DetailProduct = () => {
               <div className="flex justify-end">
                 <Link 
                   to={`/admin/update-kelola-produk/${productData.id}`} 
-                  className="inline-flex items-center justify-center rounded-md border border-primary py-2 px-4 text-center font-medium text-primary hover:bg-primary hover:text-white mr-2"
+                  className="inline-flex items-center justify-center rounded-md border border-primary py-2 px-4 text-center font-medium text-primary hover:bg-[#6A1B4D] hover:text-white mr-2"
                 >
                   Edit Produk
                 </Link>

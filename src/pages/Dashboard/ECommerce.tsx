@@ -19,7 +19,6 @@ const ECommerce: React.FC = () => {
  // Helper function to handle API errors
   const handleApiError = (response: any, errorType: string) => {
     if (response && typeof response === 'object' && 'errors' in response) {
-      console.log(response)
       if (Array.isArray(response.errors)) {
         // setError(response.errors.join(', '));
       } else if (typeof response.errors === 'object') {
@@ -129,7 +128,7 @@ const ECommerce: React.FC = () => {
           onClick={() => setTimeFilter('daily')}
           className={`px-4 py-2 rounded-lg ${
             timeFilter === 'daily' 
-              ? 'bg-primary text-white' 
+              ? 'bg-[#6A1B4D] text-white' 
               : 'bg-white dark:bg-boxdark'
           }`}
         >
@@ -139,7 +138,7 @@ const ECommerce: React.FC = () => {
           onClick={() => setTimeFilter('weekly')}
           className={`px-4 py-2 rounded-lg ${
             timeFilter === 'weekly' 
-              ? 'bg-primary text-white' 
+              ? 'bg-[#6A1B4D] text-white' 
               : 'bg-white dark:bg-boxdark'
           }`}
         >
@@ -149,7 +148,7 @@ const ECommerce: React.FC = () => {
           onClick={() => setTimeFilter('monthly')}
           className={`px-4 py-2 rounded-lg ${
             timeFilter === 'monthly' 
-              ? 'bg-primary text-white' 
+              ? 'bg-[#6A1B4D] text-white' 
               : 'bg-white dark:bg-boxdark'
           }`}
         >
@@ -165,7 +164,7 @@ const ECommerce: React.FC = () => {
           rate={`${getSalesGrowth().toFixed(2)}%`}
           levelUp={getSalesGrowth() > 0}
         >
-          <svg className="fill-primary dark:fill-white" width="22" height="16" viewBox="0 0 22 16">
+          <svg className="fill-[#6A1B4D] dark:fill-white" width="22" height="16" viewBox="0 0 22 16">
             <path
               d="M11 15.1156C4.19376 15.1156 0.825012 8.61876 0.687512 8.34376C0.584387 8.13751 0.584387 7.86251 0.687512 7.65626C0.825012 7.38126 4.19376 0.918762 11 0.918762C17.8063 0.918762 21.175 7.38126 21.3125 7.65626C21.4156 7.86251 21.4156 8.13751 21.3125 8.34376C21.175 8.61876 17.8063 15.1156 11 15.1156ZM2.26876 8.00001C3.02501 9.27189 5.98126 13.5688 11 13.5688C16.0188 13.5688 18.975 9.27189 19.7313 8.00001C18.975 6.72814 16.0188 2.43126 11 2.43126C5.98126 2.43126 3.02501 6.72814 2.26876 8.00001Z"
               fill=""
@@ -184,7 +183,7 @@ const ECommerce: React.FC = () => {
           levelUp={salesData?.length && salesData[salesData.length - 1].order_count > salesData[0].order_count}
         >
           <svg
-            className="fill-primary dark:fill-white"
+            className="fill-[#6A1B4D] dark:fill-white"
             width="20"
             height="22"
             viewBox="0 0 20 22"
@@ -225,7 +224,7 @@ const ECommerce: React.FC = () => {
             height="24" 
             viewBox="0 0 24 24" 
             fill="none" 
-            stroke="#3B82F6" 
+            stroke="#6A1B4D" 
             strokeWidth="2" 
             strokeLinecap="round" 
             strokeLinejoin="round"
@@ -246,7 +245,7 @@ const ECommerce: React.FC = () => {
           }
         >
           <svg
-            className="fill-primary dark:fill-white"
+            className="fill-[#6A1B4D] dark:fill-white"
             width="22"
             height="18"
             viewBox="0 0 22 18"

@@ -503,7 +503,7 @@ const CreateOrder = () => {
                     onClick={() => handleCategoryChange('all')}
                     className={`px-4 py-2 rounded-full text-sm font-medium ${
                       selectedCategory === 'all'
-                        ? 'bg-primary text-white'
+                        ? 'bg-[#6A1B4D] text-white'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-boxdark dark:text-gray-300 dark:hover:bg-meta-4'
                     }`}
                   >
@@ -516,7 +516,7 @@ const CreateOrder = () => {
                       onClick={() => handleCategoryChange(category.id)}
                       className={`px-4 py-2 rounded-full text-sm font-medium ${
                         selectedCategory === category.id
-                          ? 'bg-primary text-white'
+                          ? 'bg-[#6A1B4D] text-white'
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-boxdark dark:text-gray-300 dark:hover:bg-meta-4'
                       }`}
                     >
@@ -572,7 +572,7 @@ const CreateOrder = () => {
                         {/* Add to Cart Button */}
                         <button
                           onClick={() => addToCart(item)}
-                          className="w-full inline-flex items-center justify-center rounded-md bg-primary py-2 px-4 text-center font-medium text-white hover:bg-opacity-90"
+                          className="w-full inline-flex items-center justify-center rounded-md bg-[#6A1B4D] py-2 px-4 text-center font-medium text-white hover:bg-opacity-90"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -721,7 +721,7 @@ const CreateOrder = () => {
                       <button
                         onClick={handleCreateOrder}
                         disabled={orderLoading || cartItems.length === 0}
-                        className="w-full flex justify-center items-center rounded-md bg-primary py-3 px-6 font-medium text-white hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
+                        className="w-full flex justify-center items-center rounded-md bg-[#6A1B4D] py-3 px-6 font-medium text-white hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
                       >
                         {orderLoading ? (
                           <>

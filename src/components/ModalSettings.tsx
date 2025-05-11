@@ -225,7 +225,7 @@ export const Modal = ({ closeModal, onSubmit, defaultValue }) => {
           
           
           <br></br>
-          <button className="btn flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:shadow-1"
+          <button className="btn flex justify-center rounded bg-[#6A1B4D] py-2 px-6 font-medium text-gray hover:shadow-1"
                       type="submit" onClick={handleSubmit}>
             Submit
           </button>

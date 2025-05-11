@@ -373,7 +373,7 @@ const PaymentBill = ({ tableCode, onPaymentComplete }: PaymentBillProps) => {
         <button
           onClick={handleProcessPayment}
           disabled={processingPayment || !amountPaid}
-          className="w-full flex justify-center rounded bg-primary py-3 px-6 font-medium text-white hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex justify-center rounded bg-[#6A1B4D] py-3 px-6 font-medium text-white hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
         >
           {processingPayment ? 'Processing...' : 'Process Payment'}
         </button>

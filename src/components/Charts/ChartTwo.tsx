@@ -50,7 +50,7 @@ const ChartTwo: React.FC<ChartTwoProps> = ({ data }) => {
   }, [data]);
 
   const options: ApexOptions = {
-    colors: ['#3C50E0'],
+    colors: ['#6A1B4D'],
     chart: {
       fontFamily: 'Satoshi, sans-serif',
       type: 'bar',

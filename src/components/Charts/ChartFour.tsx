@@ -64,7 +64,7 @@ const ChartFour: React.FC<ChartFourProps> = ({ data }) => {
         speed: 800,
       },
     },
-    colors: ['#3C50E0', '#6577F3', '#8FD0EF', '#0FADCF', '#4E36E2'],
+    colors: ['#6A1B4D', '#F2C57C', '#8FD0EF', '#FFF8E1', '#2e2e2e'],
     plotOptions: {
       bar: {
         horizontal: true,

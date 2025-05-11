@@ -115,10 +115,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <NavLink
                         to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-dark duration-300 ease-in-out hover:bg-[#691B4C] hover:text-white ${
+                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-dark duration-300 ease-in-out hover:bg-[#6A1B4D] hover:text-white ${
                           (pathname === '/' ||
                             pathname === '/admin/dashboard') &&
-                          'bg-[#691B4C] text-white'
+                          'bg-[#6A1B4D] text-white'
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -202,8 +202,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <NavLink
                   to="/admin/kelola-kategori"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#691B4C] hover:text-white ${
-                    pathname.includes('kelola-kategori') && 'bg-[#691B4C] text-white'
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#6A1B4D] hover:text-white ${
+                    pathname.includes('kelola-kategori') && 'bg-[#6A1B4D] text-white'
                   }`}
                 >
                   <svg
@@ -228,8 +228,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <NavLink
                   to="/admin/kelola-produk"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#691B4C] hover:text-white ${
-                    pathname.includes('kelola-produk') && 'bg-[#691B4C] text-white'
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#6A1B4D] hover:text-white ${
+                    pathname.includes('kelola-produk') && 'bg-[#6A1B4D] text-white'
                   }`}
                 >
                   <svg
@@ -254,8 +254,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <NavLink
                   to="/admin/kelola-inventaris"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#691B4C] hover:text-white ${
-                    pathname.includes('kelola-inventaris') && 'bg-[#691B4C] text-white'
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#6A1B4D] hover:text-white ${
+                    pathname.includes('kelola-inventaris') && 'bg-[#6A1B4D] text-white'
                   }`}
                 >
                   <svg
@@ -284,8 +284,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <NavLink
                   to="/admin/kelola-meja"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#691B4C] hover:text-white ${
-                    pathname.includes('kelola-meja') && 'bg-[#691B4C] text-white'
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#6A1B4D] hover:text-white ${
+                    pathname.includes('kelola-meja') && 'bg-[#6A1B4D] text-white'
                   }`}
                 >
                   <svg
@@ -310,8 +310,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <NavLink
                   to="/admin/kelola-pesanan"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#691B4C] hover:text-white ${
-                    pathname.includes('kelola-pesanan') && 'bg-[#691B4C] text-white'
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-dark duration-300 ease-in-out hover:bg-[#6A1B4D] hover:text-white ${
+                    pathname.includes('kelola-pesanan') && 'bg-[#6A1B4D] text-white'
                   }`}
                 >
                   <svg

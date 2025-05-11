@@ -105,7 +105,7 @@ const AuthCallback = () => {
             <div className="mt-4 text-center">
               <button
                 onClick={() => navigate('/admin/auth/signin')}
-                className="rounded bg-[#691B4C] px-4 py-2 text-white hover:bg-[#691B4C]/90"
+                className="rounded bg-[#6A1B4D] px-4 py-2 text-white hover:bg-[#6A1B4D]/90"
               >
                 Kembali ke Login
               </button>

@@ -245,7 +245,7 @@ const FormTableManagement = ({ titlePage }: FormTableManagementProps) => {
                   <button 
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex justify-center rounded bg-primary py-2 px-6 font-medium text-gray hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
+                    className="flex justify-center rounded bg-[#6A1B4D] py-2 px-6 font-medium text-gray hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? 'Menyimpan...' : 'Simpan'}
                   </button>

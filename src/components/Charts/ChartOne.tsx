@@ -84,7 +84,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
       position: 'top',
       horizontalAlign: 'left',
     },
-    colors: ['#3C50E0', '#80CAEE', '#5DDAB4'],
+    colors: ['#6A1B4D', '#AB2B7C', '#5DDAB4'],
     chart: {
       fontFamily: 'Satoshi, sans-serif',
       height: 335,
@@ -146,7 +146,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ data }) => {
     markers: {
       size: 4,
       colors: '#fff',
-      strokeColors: ['#3056D3', '#80CAEE', '#5DDAB4'],
+      strokeColors: ['#3056D3', '#AB2B7C', '#5DDAB4'],
       strokeWidth: 3,
       strokeOpacity: 0.9,
       strokeDashArray: 0,
