@@ -154,6 +154,42 @@ const FormProductManagement = ({ titlePage }: FormProductManagementProps) => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     
+    const symbolRegex = /^[a-zA-Z0-9\s]+$/;
+    
+    // Check for empty fields
+    if (!productData.name.trim()) {
+      setError("Nama produk tidak boleh kosong");
+      return;
+    } else if (!symbolRegex.test(productData.name)) {
+      setError("Nama produk tidak boleh mengandung karakter khusus");
+      return;
+    }
+    
+    if (!productData.description.trim()) {
+      setError("Deskripsi produk tidak boleh kosong");
+      return;
+    }
+    
+    if (!productData.price || productData.price < 1000) {
+      setError("Harga produk minimal Rp1.000");
+      return;
+    }
+    
+    if (!productData.category) {
+      setError("Kategori harus dipilih");
+      return;
+    }
+    
+    if (!id && (!productData.stock || productData.stock < 1)) {
+      setError("Stock minimal 1 barang");
+      return;
+    }
+    
+    if (!id && !productData.image) {
+      setError("Gambar produk harus diunggah");
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);

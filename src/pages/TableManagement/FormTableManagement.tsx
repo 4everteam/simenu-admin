@@ -89,11 +89,43 @@ const FormTableManagement = ({ titlePage }: FormTableManagementProps) => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
+
+    const symbolRegex = /^[a-zA-Z0-9\s]+$/;
+
+    // Validate code
+    if (!tableData.code.trim()) {
+      setError('Kode meja tidak boleh kosong.');
+      return;
+    }
+    if (!symbolRegex.test(tableData.code)) {
+      setError('Kode meja hanya boleh berisi huruf dan angka tanpa simbol aneh.');
+      return;
+    }
+
+    // Validate status
+    if (!tableData.status.trim()) {
+      setError('Status tidak boleh kosong.');
+      return;
+    }
+    if (!symbolRegex.test(tableData.status)) {
+      setError('Status hanya boleh berisi huruf dan angka tanpa simbol aneh.');
+      return;
+    }
+
+    // Validate capacity
+    if (tableData.capacity === undefined || tableData.capacity === null || tableData.capacity === 0) {
+      setError('Kapasitas tidak boleh kosong.');
+      return;
+    }
+    if (isNaN(tableData.capacity) || tableData.capacity < 1) {
+      setError('Kapasitas harus berupa angka lebih dari 0.');
+      return;
+    }
     
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);
-    
+
     try {
       let response;
       

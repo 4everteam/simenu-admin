@@ -71,7 +71,22 @@ const Table = ({
       setError(null);
       
       const response = await deleteOrder({ id: selectedId.replace(/\//g, '|') });
-      
+
+      if (response && typeof response === 'object' && 'errors' in response) {
+        let errorMsg = 'Failed to delete order';
+        if (Array.isArray(response.errors)) {
+          errorMsg = response.errors.join(', ');
+        } else if (typeof response.errors === 'object') {
+          errorMsg = Object.values(response.errors).join(', ');
+        } else if (typeof response.errors === 'string') {
+          errorMsg = response.errors;
+        }
+        setError(errorMsg);
+        setTimeout(() => {
+          setError(null);
+        }, 1000);
+      }
+
       if (response) {
         // Use onRefresh callback instead of navigate(0)
         if (onRefresh) {

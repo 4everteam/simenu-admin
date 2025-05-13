@@ -6,6 +6,7 @@ import ChartTwo from '../../components/Charts/ChartTwo';
 import { getSalesReport, getPopularMenu, getPeakHours, getTableUsage } from '../../fetch/report-management';
 import { formatRupiah } from '../../utils/formatCurrency';
 import ChartFour from '../../components/Charts/ChartFour';
+import { set } from 'lodash';
 
 const ECommerce: React.FC = () => {
   const [timeFilter, setTimeFilter] = useState<'daily' | 'weekly' | 'monthly'>('daily');
@@ -66,6 +67,11 @@ const ECommerce: React.FC = () => {
   };  
 
   const fetchDashboardData = async () => {
+    
+    setSalesData(null);
++   setPopularMenu(null);
++   setPeakHours(null);
++   setTableUsage(null);
     setLoading(true);
     setError(null);
 
