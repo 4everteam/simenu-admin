@@ -154,6 +154,7 @@ const FormProductManagement = ({ titlePage }: FormProductManagementProps) => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     
+    // Regular expression to allow only letters and numbers
     const symbolRegex = /^[a-zA-Z0-9\s]+$/;
     
     // Check for empty fields
