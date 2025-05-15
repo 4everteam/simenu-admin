@@ -304,19 +304,32 @@ const DetailOrder = () => {
   const renderStatusSelect = (item: OrderItem) => {
     const isUpdating = updatingItemId === item.id;
     
+    // If status is completed, show a read-only badge instead of select
+    if (item.status === 'completed') {
+      return (
+        <div className="inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium bg-success text-success">
+          Selesai
+        </div>
+      );
+    }
+    
+    // If status is cancelled, only show cancelled status
+    if (item.status === 'cancelled') {
+      return (
+        <div className="inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium bg-danger text-danger">
+          Dibatalkan
+        </div>
+      );
+    }
+    
+    // For pending status, allow changing to completed or cancelled
     return (
       <div className="flex items-center gap-2">
         <select
           value={item.status}
           onChange={(e) => handleItemStatusChange(item.id, e.target.value)}
           disabled={isUpdating}
-          className={`rounded py-1 px-2 text-sm font-medium border ${
-            item.status === 'completed'
-              ? 'border-success text-success'
-              : (item.status === 'pending'
-                ? 'border-warning text-warning'
-                : 'border-danger text-danger')
-          }`}
+          className={`rounded py-1 px-2 text-sm font-medium border border-warning text-warning`}
         >
           <option value="pending">Menunggu</option>
           <option value="completed">Selesai</option>
@@ -479,12 +492,14 @@ const DetailOrder = () => {
                   </div>
                 </div>
               </div>
-              <button 
+              {orderData.status !== 'completed' && (
+                <button 
                 onClick={handleDeleteClick}
                 className="inline-flex items-center justify-center rounded-md border border-danger py-2 px-4 text-center font-medium text-danger hover:bg-danger hover:text-white"
               >
                 Hapus Pesanan
               </button>
+              )}
             </div>
           </div>
         </div>
